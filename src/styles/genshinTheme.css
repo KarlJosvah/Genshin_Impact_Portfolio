@@ -1,0 +1,24 @@
+.genshin-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.three-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.sidebar-right {
+  position: absolute;
+  right: 6.5%;
+  top: 10%;
+  width: 328px;
+  color: var(--genshin-gold);
+  z-index: 10;
+}

@@ -1,0 +1,27 @@
+.side-menu-container {
+  position: absolute;
+  left: 140px;
+  top: 11%;
+  z-index: 10;
+}
+
+.menu-button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 2.1rem;
+  margin: 26px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--genshin-gold);
+}
+
+.menu-button.active {
+  color: var(--genshin-accent);
+  text-shadow: 0 0 10px var(--genshin-accent);
+}
+
+.menu-button:hover:not(.active) {
+  transform: translateX(10px);
+  color: #fff;
+}

@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'GenshinFont';
+  src: url('/assets/fonts/zh-cn.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --genshin-gold: #ece5d8;
+  --genshin-dark: #1b1b1b;
+  --genshin-accent: #ffd780;
+  --font-primary: 'GenshinFont', 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--genshin-dark);
+  color: var(--genshin-gold);
+  font-family: var(--font-primary);
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}

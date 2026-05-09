@@ -1,0 +1,180 @@
+.character-name {
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.shuriken-star {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8));
+}
+
+.attributes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stars-container {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 15px;
+}
+
+.constellation-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--genshin-gold);
+  transition: background 0.2s;
+}
+
+.constellation-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.level-info {
+  margin-bottom: 25px;
+}
+
+.level-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+}
+
+.level-cap {
+  font-weight: bold;
+  opacity: 0.4;
+}
+
+.level-bar-container {
+  margin-top: 5px;
+}
+
+.level-bar-bg {
+  flex-grow: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.level-bar-fill {
+  height: 100%;
+  background: #00e5ff;
+  box-shadow: 0 0 3px #00e5ff;
+}
+
+.stats-list {
+  padding: 0;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.attribute-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 5px;
+  font-size: 1.1rem;
+}
+
+.attribute-row:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.attribute-row:nth-child(even) {
+  background: transparent;
+}
+
+.attribute-row:hover {
+  background: rgba(100, 100, 100, .1);
+}
+
+.attribute-label-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.9;
+}
+
+.attribute-icon {
+  width: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.attribute-value {
+  font-weight: bold;
+}
+
+.details-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--genshin-gold);
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-family: var(--font-primary);
+  text-align: center;
+}
+
+.details-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.friendship-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.friendship-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.friendship-heart {
+  color: #ff80ab;
+}
+
+.friendship-bar {
+  flex-grow: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.friendship-progress {
+  width: 100%;
+  height: 100%;
+  background: #b388ff;
+  box-shadow: 0 0 3px #b388ff;
+}
+
+.friendship-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.description-container {
+  margin-top: 20px;
+}
+
+.description-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.7;
+}
