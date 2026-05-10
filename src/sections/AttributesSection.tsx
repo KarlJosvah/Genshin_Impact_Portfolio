@@ -8,7 +8,27 @@ const ShurikenStar = ({ size = 25 }) => (
 );
 
 const HP_Icon = () => (
-  <img src="/assets/svg/water-droplet.svg" alt="HP" style={{ width: '32px', height: '40px', filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg/HP.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+);
+
+const ATK_Icon = () => (
+  <img src="/assets/images/svg/ATK.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+);
+
+const DEF_Icon = () => (
+  <img src="/assets/images/svg/DEF.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+);
+
+const EM_Icon = () => (
+  <img src="/assets/images/svg/EM.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+);
+
+const STA_Icon = () => (
+  <img src="/assets/images/svg/STA.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+);
+
+const FRI_Icon = () => (
+  <img src="/assets/images/svg/Friendship.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const AttributesSection = () => {
@@ -39,17 +59,17 @@ const AttributesSection = () => {
 
       <div className="stats-list">
         <AttributeRow label="Max HP" value="24,219" icon={<HP_Icon />} />
-        <AttributeRow label="ATK" value="1,145" icon={<HP_Icon />} />
-        <AttributeRow label="DEF" value="2,632" icon={<HP_Icon />} />
-        <AttributeRow label="Elemental Mastery" value="0" icon={<HP_Icon />} />
-        <AttributeRow label="Max Stamina" value="240" icon={<HP_Icon />} />
+        <AttributeRow label="ATK" value="1,145" icon={<ATK_Icon />} />
+        <AttributeRow label="DEF" value="2,632" icon={<DEF_Icon />} />
+        <AttributeRow label="Elemental Mastery" value="0" icon={<EM_Icon />} />
+        <AttributeRow label="Max Stamina" value="240" icon={<STA_Icon />} />
       </div>
 
       <button className="details-btn">Details</button>
 
       <div className="friendship-info">
         <span className="friendship-label">
-          <span className="friendship-heart">♥</span> Friendship
+          <span className="attribute-icon">{<FRI_Icon />}</span>Friendship
         </span>
         <span style={{ fontWeight: 'bold' }}>10</span>
       </div>
