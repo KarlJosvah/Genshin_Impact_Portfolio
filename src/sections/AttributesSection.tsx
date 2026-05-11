@@ -34,7 +34,7 @@ const FRI_Icon = () => (
 const AttributesSection = () => {
   return (
     <div className="sidebar-right">
-      <h1 className="character-name">Albedo</h1>
+      <h1 className="character-name">Karl Josvah</h1>
 
       <div className="attributes-header">
         <div className="stars-container">
