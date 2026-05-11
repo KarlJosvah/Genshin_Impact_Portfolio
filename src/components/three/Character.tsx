@@ -1,13 +1,23 @@
+import { useEffect } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+
 const Character = () => {
-  // Replace with actual model path when available
-  // const { scene } = useGLTF('/assets/models/characterModel.glb');
-  
+  const { scene, animations } = useGLTF('/assets/models/Leonard.glb');
+  const { actions } = useAnimations(animations, scene);
+
+  useEffect(() => {
+    if (actions["Idle"]) {
+      actions["Idle"].reset().fadeIn(0.5).play();
+    }
+    return () => {
+      if (actions["Idle"]) actions["Idle"].fadeOut(0.5);
+    };
+  }, [actions]);
+
   return (
-    <mesh position={[0, 0, 0]}>
-      <boxGeometry args={[1, 2, 1]} />
-      <meshStandardMaterial color="gold" />
-    </mesh>
+    <primitive object={scene} position={[0, -1, 0]} scale={1} />
   );
 };
 
 export default Character;
+
