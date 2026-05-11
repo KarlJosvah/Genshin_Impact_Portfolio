@@ -1,0 +1,92 @@
+.weapon-container {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+}
+
+.weapon-header {
+  margin-bottom: 20px;
+}
+
+.weapon-name {
+  font-size: 2.2rem;
+  margin-bottom: 5px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.weapon-rarity {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.weapon-main-stats {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.weapon-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.weapon-stat-label {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.weapon-stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.weapon-passive {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid var(--genshin-accent);
+  padding: 15px;
+  border-radius: 0 5px 5px 0;
+}
+
+.weapon-passive-name {
+  color: var(--genshin-accent);
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.weapon-passive-desc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.weapon-refine {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.weapon-image-container {
+  position: absolute;
+  left: -450px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 30px rgba(0, 229, 255, 0.2));
+}
+
+.weapon-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}

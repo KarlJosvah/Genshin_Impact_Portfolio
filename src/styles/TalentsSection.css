@@ -1,0 +1,106 @@
+.talents-container {
+  display: flex;
+  gap: 30px;
+  width: 700px;
+  right: 5%;
+}
+
+.talents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 80px;
+}
+
+.talent-item {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.talent-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--genshin-accent);
+}
+
+.talent-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--genshin-accent);
+  box-shadow: 0 0 15px var(--genshin-accent);
+}
+
+.talent-icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+}
+
+.talent-item.active .talent-icon {
+  opacity: 1;
+}
+
+.talent-details {
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 25px;
+  border-radius: 10px;
+  min-height: 400px;
+  animation: fadeIn 0.3s ease;
+}
+
+.talent-header {
+  margin-bottom: 20px;
+}
+
+.talent-type {
+  font-size: 0.8rem;
+  color: var(--genshin-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.talent-name {
+  font-size: 2rem;
+  color: #fff;
+}
+
+.talent-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.talent-stats {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.talent-stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.talent-stat-label {
+  opacity: 0.7;
+}
+
+.talent-stat-value {
+  color: var(--genshin-accent);
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
