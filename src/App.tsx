@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Scene from './components/three/Scene.tsx';
 import SideMenu from './components/ui/SideMenu.tsx';
+import CharacterHeader from './components/ui/CharacterHeader.tsx';
 import { MenuType } from './constants/menuConfig.ts';
 import AttributesSection from './sections/AttributesSection.tsx';
 import WeaponsSection from './sections/WeaponsSection.tsx';
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <div className="genshin-container">
+      <CharacterHeader />
       <Scene />
       <SideMenu activeSection={activeSection} onSectionChange={setActiveSection} />
       {renderSection()}

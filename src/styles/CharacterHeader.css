@@ -1,0 +1,211 @@
+.character-header-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  z-index: 20;
+  pointer-events: none; /* Let clicks pass through default background space */
+}
+
+/* Enable pointer events only for interactive panels */
+.header-left,
+.header-middle-wrapper,
+.header-right {
+  pointer-events: auto;
+}
+
+/* Left Section: Vision & Character Info */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vision-container {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--genshin-accent);
+  background: radial-gradient(circle, rgba(255, 215, 128, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 15px rgba(255, 215, 128, 0.4);
+}
+
+.vision-icon {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 128, 0.8));
+}
+
+.vision-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.vision-element {
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.vision-divider {
+  color: var(--genshin-gold);
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+
+.character-name-header {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Middle Section: Scrollable Character Carousel with Blur/Fade Ends */
+.header-middle-wrapper {
+  flex-grow: 1;
+  max-width: 50%;
+  height: 100%;
+  position: relative;
+  /* Apply mask image for fade-out edge effects at left and right extremes */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+  padding: 0 20px;
+}
+
+.carousel-container {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  height: 100%;
+  align-items: center;
+  padding: 0 40px; /* Extra padding so borders aren't clipped */
+  scroll-behavior: auto; /* Smoother dragging scroll */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.carousel-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding-bottom: 8px; /* Room for active bottom line */
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2px solid rgba(236, 229, 216, 0.25); /* Default genshin-gold with opacity */
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.carousel-item:hover .carousel-avatar {
+  transform: scale(1.08);
+  border-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.carousel-item.active .carousel-avatar {
+  border-color: #3de1ff;
+  background: radial-gradient(circle, rgba(61, 225, 255, 0.35) 0%, rgba(0, 0, 0, 0.6) 100%);
+  box-shadow: 0 0 15px rgba(61, 225, 255, 0.6);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  /* Pull character's face UP into the circle */
+  transform: scale(1.4) translateY(-14%) translateX(-2%);
+  transition: transform 0.25s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.carousel-item:hover .avatar-img {
+  transform: scale(1.48) translateY(-14%) translateX(-2%);
+}
+
+.active-line {
+  position: absolute;
+  bottom: 0px;
+  width: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 5px;
+  background-color: #3de1ff;
+  transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-item.active .active-line {
+  width: calc(100% + 22px);
+}
+
+/* Right Section: Close Button */
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.close-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(236, 229, 216, 0.4);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--genshin-gold);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fff;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.close-icon-svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
