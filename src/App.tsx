@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Scene from './components/three/Scene.tsx';
-import SideMenu from './components/ui/SideMenu.tsx';
-import CharacterHeader from './components/ui/CharacterHeader.tsx';
+import SideMenu from './sections/SideMenu.tsx';
+import CharacterHeader from './sections/CharacterHeader.tsx';
 import { MenuType } from './constants/menuConfig.ts';
 import AttributesSection from './sections/AttributesSection.tsx';
 import WeaponsSection from './sections/WeaponsSection.tsx';

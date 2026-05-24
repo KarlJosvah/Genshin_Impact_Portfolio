@@ -1,6 +1,6 @@
-import { MENU_ITEMS, MenuType } from '../../constants/menuConfig.ts';
-import MenuButton from './MenuButton.tsx';
-import '../../styles/SideMenu.css';
+import { MENU_ITEMS, MenuType } from '../constants/menuConfig.ts';
+import MenuButton from '../components/ui/MenuButton.tsx';
+import '../styles/SideMenu.css';
 
 interface SideMenuProps {
   activeSection: MenuType;
@@ -21,6 +21,5 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeSection, onSectionChange }) =
     </div>
   );
 };
-
 
 export default SideMenu;
