@@ -2,79 +2,198 @@
   display: flex;
   flex-direction: column;
   width: 380px;
+  color: #ece5d8;
+  height: 100%;
 }
 
 .weapon-header {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .weapon-name {
   font-size: 2.2rem;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   color: #fff;
+  font-weight: 600;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-.weapon-rarity {
+.weapon-type-row {
   display: flex;
-  gap: 2px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  opacity: 0.9;
   margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.weapon-lock {
+  font-size: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  padding: 2px 5px;
 }
 
 .weapon-main-stats {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .weapon-stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+}
+.weapon-stat-row:last-child {
+  margin-bottom: 0;
 }
 
 .weapon-stat-label {
-  font-size: 1rem;
-  opacity: 0.8;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .weapon-stat-value {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.weapon-rarity {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+  color: #ffcc32;
+  font-size: 1.4rem;
+}
+
+.weapon-level-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 5px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.level-text {
+  font-size: 1.1rem;
   font-weight: bold;
+}
+
+.level-highlight {
+  color: #fff;
+}
+
+.ascension-stars {
+  display: flex;
+  gap: 4px;
+  color: #ece5d8;
+  font-size: 1.1rem;
 }
 
 .weapon-passive {
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 3px solid var(--genshin-accent);
-  padding: 15px;
-  border-radius: 0 5px 5px 0;
+  margin-bottom: 20px;
+}
+
+.weapon-refine {
+  color: #ffcc32;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .weapon-passive-name {
-  color: var(--genshin-accent);
+  color: #fff;
   font-weight: bold;
-  margin-bottom: 5px;
-  display: flex;
-  justify-content: space-between;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
 }
 
 .weapon-passive-desc {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.5;
   opacity: 0.9;
 }
 
-.weapon-refine {
-  font-size: 0.8rem;
+.highlight-cyan {
+  color: #55e6c1;
+  font-weight: bold;
+}
+
+.description-container {
+  margin-bottom: 25px;
+}
+
+.description-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
   opacity: 0.6;
-  text-transform: uppercase;
+}
+
+.weapon-actions {
+  position: fixed;
+  bottom: 40px;
+  right: 6.5%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  z-index: 100;
+}
+
+.weapon-btn {
+  background: #e6e2d8;
+  color: #3b4255;
+  border: none;
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-switch.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.equipped-badge {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 15px 4px 4px;
+  border-radius: 25px;
+  gap: 10px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.equipped-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.weapon-btn:hover {
+  background: #fff;
+  transform: scale(1.05);
 }
 
 .weapon-image-container {
-  position: absolute;
-  left: -450px;
+  position: fixed;
+  left: 20%;
   top: 50%;
   transform: translateY(-50%);
   width: 400px;
