@@ -10,12 +10,28 @@ const CharacterHeader: React.FC<CharacterHeaderProps> = ({ onClose }) => {
   // Setup state to track active index (default to first one)
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  // Generate 20 avatars as requested
-  const avatars = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    name: `Albedo ${i + 1}`,
-    src: '/assets/images/side_icons/Albedo_Side_Icon.webp',
-  }));
+  // Generate 20 avatars from the available side icons randomly, stabilized with useMemo
+  const avatars = React.useMemo(() => {
+    const availableAvatars = [
+      'Aether_Side_Icon.webp',
+      'Albedo_Side_Icon.webp',
+      'Kamisato_Ayaka_Side_Icon.webp',
+      'Raiden_Shogun_Side_Icon.webp',
+      'Venti_Side_Icon.webp',
+      'Yelan_Side_Icon.webp',
+      'Zhongli_Side_Icon.webp',
+    ];
+
+    return Array.from({ length: 20 }, (_, i) => {
+      const fileName = availableAvatars[Math.floor(Math.random() * availableAvatars.length)];
+      const name = fileName.replace('_Side_Icon.webp', '').replace(/_/g, ' ');
+      return {
+        id: i,
+        name: name,
+        src: `/assets/images/side_icons/${fileName}`,
+      };
+    });
+  }, []);
 
   const handleClose = () => {
     console.log('Close button clicked (placeholder)');

@@ -83,6 +83,22 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
   padding: 0 20px;
+  transition: -webkit-mask-image 0.2s ease, mask-image 0.2s ease;
+}
+
+.header-middle-wrapper.no-fade-left {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 85%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 85%, transparent 100%);
+}
+
+.header-middle-wrapper.no-fade-right {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 100%);
+}
+
+.header-middle-wrapper.no-fade-both {
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .carousel-container {
