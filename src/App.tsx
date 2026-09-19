@@ -12,13 +12,24 @@ import './styles/genshinTheme.css';
 
 function App() {
   const [activeSection, setActiveSection] = useState<MenuType>(MenuType.Attributes);
+  const [isWeaponSelectionOpen, setIsWeaponSelectionOpen] = useState(false);
+
+  const handleSectionChange = (section: MenuType) => {
+    setActiveSection(section);
+    setIsWeaponSelectionOpen(false);
+  };
 
   const renderSection = () => {
     switch (activeSection) {
       case MenuType.Attributes:
         return <AttributesSection />;
       case MenuType.Weapons:
-        return <WeaponsSection />;
+        return (
+          <WeaponsSection
+            isSelectionOpen={isWeaponSelectionOpen}
+            setIsSelectionOpen={setIsWeaponSelectionOpen}
+          />
+        );
       case MenuType.Talents:
         return <TalentsSection />;
       case MenuType.Constellation:
@@ -31,8 +42,8 @@ function App() {
   return (
     <div className="genshin-container">
       <CharacterHeader />
-      <Scene />
-      <SideMenu activeSection={activeSection} onSectionChange={setActiveSection} />
+      <Scene isWeaponSelectionOpen={isWeaponSelectionOpen} />
+      <SideMenu activeSection={activeSection} onSectionChange={handleSectionChange} />
       {renderSection()}
     </div>
   );

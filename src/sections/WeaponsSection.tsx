@@ -2,8 +2,25 @@ import { useState } from 'react';
 import '../styles/WeaponsSection.css';
 import WeaponSelection from './WeaponSelection.tsx';
 
-const WeaponsSection = () => {
-  const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+interface WeaponsSectionProps {
+  isSelectionOpen?: boolean;
+  setIsSelectionOpen?: (open: boolean) => void;
+}
+
+const WeaponsSection: React.FC<WeaponsSectionProps> = ({
+  isSelectionOpen: propIsSelectionOpen,
+  setIsSelectionOpen: propSetIsSelectionOpen,
+}) => {
+  const [localIsSelectionOpen, localSetIsSelectionOpen] = useState(false);
+
+  const isSelectionOpen = propIsSelectionOpen !== undefined ? propIsSelectionOpen : localIsSelectionOpen;
+  const setIsSelectionOpen = (open: boolean) => {
+    if (propSetIsSelectionOpen) {
+      propSetIsSelectionOpen(open);
+    } else {
+      localSetIsSelectionOpen(open);
+    }
+  };
 
   return (
     <>

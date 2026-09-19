@@ -1,69 +1,139 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 
-const Character = () => {
+interface CharacterProps {
+  isWeaponSelectionOpen?: boolean;
+}
+
+const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) => {
   const { scene, animations } = useGLTF('/assets/models/Leonard.glb');
   const { actions, names, mixer } = useAnimations(animations, scene);
 
-  const playIdle = useCallback(() => {
-    if (actions["Idle"]) {
-      actions["Idle"].reset().fadeIn(0.5).play();
+  // Reference to hold a custom, blended idle animation action that doesn't affect left shoulder to hand bones
+  const modifiedIdleActionRef = useRef<THREE.AnimationAction | null>(null);
+
+  // Debug log to trace available animations in the GLB
+  console.log("Character animations available:", names);
+
+  // Initialize the modified idle clip once animations/mixer are available
+  useEffect(() => {
+    const presentClip = animations.find(c => c.name.toLowerCase() === 'present');
+    const idleClip = animations.find(c => c.name.toLowerCase() === 'idle');
+
+    if (presentClip && idleClip && !modifiedIdleActionRef.current) {
+      // Find all bone/node names animated by Present
+      const presentBones = new Set(
+        presentClip.tracks.map(track => track.name.split('.')[0])
+      );
+
+      // Filter out track names from Idle that are animated by Present
+      const filteredTracks = idleClip.tracks.filter(track => {
+        const boneName = track.name.split('.')[0];
+        return !presentBones.has(boneName);
+      });
+
+      // Create a modified AnimationClip
+      const modifiedIdleClip = new THREE.AnimationClip(
+        'Idle_Without_LeftArm',
+        idleClip.duration,
+        filteredTracks
+      );
+
+      modifiedIdleActionRef.current = mixer.clipAction(modifiedIdleClip);
     }
-  }, [actions]);
+  }, [animations, mixer]);
 
   useEffect(() => {
-    playIdle();
-    
-    let timeoutId: number;
+    const presentName = names.find(n => n.toLowerCase() === 'present') || 'Present';
+    const idleName = names.find(n => n.toLowerCase() === 'idle') || 'Idle';
 
-    const playRandom = () => {
-      // Filter out Idle and T_Pose
-      const available = names.filter(n => n !== "Idle" && n !== "T_Pose" && n !== "T-Pose");
-      if (available.length === 0) return;
+    const presentAction = actions[presentName];
+    const idleAction = actions[idleName];
 
-      const randomName = available[Math.floor(Math.random() * available.length)];
-      const currentAction = actions["Idle"];
-      const nextAction = actions[randomName];
+    if (isWeaponSelectionOpen) {
+      const modIdleAction = modifiedIdleActionRef.current || idleAction;
 
-      if (currentAction && nextAction) {
-        nextAction.reset().setLoop(THREE.LoopOnce, 1);
-        nextAction.clampWhenFinished = true;
-        
-        // Crossfade from Idle to Random
-        nextAction.fadeIn(0.5).play();
-        currentAction.fadeOut(0.5);
+      if (presentAction) {
+        // Stop current actions
+        mixer.stopAllAction();
 
-        // Wait for animation to finish
-        const onFinished = (e: any) => {
-          if (e.action === nextAction) {
-            mixer.removeEventListener('finished', onFinished);
-            
-            // Crossfade back to Idle
-            currentAction.reset().fadeIn(0.5).play();
-            nextAction.fadeOut(0.5);
+        // Play the modified idle breathing animation (covers all other bones)
+        if (modIdleAction) {
+          modIdleAction.reset().fadeIn(0.3).play();
+        }
 
-            // Set next random timer
-            scheduleNext();
-          }
-        };
-
-        mixer.addEventListener('finished', onFinished);
+        // Play the Present animation (only covers shoulder to hand, loop once, clamp final state)
+        presentAction.reset();
+        presentAction.setLoop(THREE.LoopOnce, 1);
+        presentAction.clampWhenFinished = true;
+        presentAction.fadeIn(0.3).play();
+      } else {
+        // Fallback to regular idle if Present is not found
+        if (idleAction) {
+          idleAction.reset().fadeIn(0.3).play();
+        }
       }
-    };
 
-    const scheduleNext = () => {
-      const delay = Math.random() * (15000 - 5000) + 5000;
-      timeoutId = window.setTimeout(playRandom, delay);
-    };
+      return () => {
+        if (presentAction) presentAction.fadeOut(0.3);
+        if (modIdleAction) modIdleAction.fadeOut(0.3);
+      };
+    } else {
+      // Normal idle + random plays behavior
+      if (idleAction) {
+        idleAction.reset().fadeIn(0.3).play();
+      }
 
-    scheduleNext();
+      let timeoutId: number;
 
-    return () => {
-      window.clearTimeout(timeoutId);
-      mixer.stopAllAction();
-    };
-  }, [actions, names, mixer, playIdle]);
+      const playRandom = () => {
+        // Filter out Idle, Present, and T-poses
+        const available = names.filter(
+          n => n.toLowerCase() !== "idle" && n.toLowerCase() !== "present" && n.toLowerCase() !== "t_pose" && n.toLowerCase() !== "t-pose"
+        );
+        if (available.length === 0) return;
+
+        const randomName = available[Math.floor(Math.random() * available.length)];
+        const nextAction = actions[randomName];
+
+        if (idleAction && nextAction) {
+          nextAction.reset().setLoop(THREE.LoopOnce, 1);
+          nextAction.clampWhenFinished = true;
+
+          nextAction.fadeIn(0.5).play();
+          idleAction.fadeOut(0.5);
+
+          const onFinished = (e: any) => {
+            if (e.action === nextAction) {
+              mixer.removeEventListener('finished', onFinished);
+
+              idleAction.reset().fadeIn(0.5).play();
+              nextAction.fadeOut(0.5);
+
+              scheduleNext();
+            }
+          };
+
+          mixer.addEventListener('finished', onFinished);
+        }
+      };
+
+      const scheduleNext = () => {
+        const delay = Math.random() * (15000 - 5000) + 5000;
+        timeoutId = window.setTimeout(playRandom, delay);
+      };
+
+      scheduleNext();
+
+      return () => {
+        window.clearTimeout(timeoutId);
+        if (idleAction) {
+          idleAction.fadeOut(0.3);
+        }
+      };
+    }
+  }, [isWeaponSelectionOpen, actions, names, mixer]);
 
   return (
     <primitive object={scene} position={[0, -1, 0]} scale={1} />
