@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import WeaponCard, { type WeaponItem } from '../components/ui/WeaponCard.tsx';
 import '../styles/WeaponSelection.css';
 
 interface WeaponSelectionProps {
@@ -6,13 +7,16 @@ interface WeaponSelectionProps {
 }
 
 const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
+  const [selectedId, setSelectedId] = useState<number>(0);
+
   // Generate placeholder weapons (a mix of 4 and 5 stars)
-  const weapons = Array.from({ length: 24 }, (_, i) => ({
+  const weapons: WeaponItem[] = Array.from({ length: 24 }, (_, i) => ({
     id: i,
     rarity: i % 5 === 0 ? 5 : 4,
     refinement: Math.floor(Math.random() * 5) + 1,
     level: 90,
-    isLocked: i % 3 === 0
+    isLocked: i % 3 === 0,
+    equippedAvatarSrc: i === 0 ? '/assets/images/side_icons/Albedo_Side_Icon.webp' : undefined,
   }));
 
   return (
@@ -20,45 +24,46 @@ const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
       {/* Top Right Global Buttons */}
       <div className="ws-global-buttons">
         <button className="ws-btn-compare">Compare</button>
-        <button className="ws-btn-back" onClick={onClose}>↩</button>
+        <button className="ws-btn-back" onClick={onClose} aria-label="Back">
+          ↶
+        </button>
       </div>
 
       {/* Left Panel */}
       <div className="weapon-selection-panel">
         <div className="ws-header">
-          <div className="ws-header-icon"></div>
+          <img
+            src="/assets/images/svg/ATK.svg"
+            alt="ATK"
+            className="ws-header-icon"
+          />
           <h2 className="ws-title">Weapon Selection</h2>
         </div>
 
         <div className="ws-grid-container">
           <div className="ws-grid">
             {weapons.map(weapon => (
-              <div key={weapon.id} className={`ws-card rarity-${weapon.rarity}`}>
-                <div className="ws-card-refine">{weapon.refinement}</div>
-                {weapon.isLocked && <div className="ws-card-lock">🔒</div>}
-                {/* Placeholder empty div for weapon image */}
-                <div className="ws-card-image" />
-                
-                <div className="ws-card-bottom">
-                  <div className="ws-card-stars">
-                    {Array.from({ length: weapon.rarity }).map((_, idx) => (
-                      <span key={idx}>★</span>
-                    ))}
-                  </div>
-                  <div className="ws-card-level">Lv. {weapon.level}</div>
-                </div>
-              </div>
+              <WeaponCard
+                key={weapon.id}
+                weapon={weapon}
+                isSelected={selectedId === weapon.id}
+                onClick={() => setSelectedId(weapon.id)}
+              />
             ))}
           </div>
         </div>
 
         <div className="ws-bottom-controls">
-          <button className="ws-icon-btn">⧨</button> {/* Placeholder for filter icon */}
+          <button className="ws-icon-btn" title="Filter">
+            ⧨
+          </button>
           <div className="ws-dropdown">
             <span>Quality</span>
             <span>▼</span>
           </div>
-          <button className="ws-icon-btn">⇅</button> {/* Placeholder for sort icon */}
+          <button className="ws-icon-btn" title="Sort">
+            ⇅
+          </button>
         </div>
       </div>
     </div>

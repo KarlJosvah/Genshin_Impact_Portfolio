@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className="genshin-container">
-      <CharacterHeader />
+      {!isWeaponSectionActive && <CharacterHeader />}
       <Scene isWeaponSectionActive={isWeaponSectionActive} />
       <SideMenu activeSection={activeSection} onSectionChange={setActiveSection} />
       {renderSection()}

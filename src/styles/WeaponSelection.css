@@ -12,40 +12,42 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 55%;
+  width: calc(100vw * 7 / 24); /* 7/24 of screen width */
+  min-width: 360px;
   height: 100%;
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  padding: 40px 60px;
-  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+  padding: 30px 20px 24px 30px;
+  background: linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 85%, transparent 100%);
   box-sizing: border-box;
 }
 
 .ws-header {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 .ws-header-icon {
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 128, 0.8));
 }
 .ws-title {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #ece5d8;
   font-weight: 600;
   margin: 0;
+  font-family: var(--font-primary, sans-serif);
 }
 
 .ws-grid-container {
   flex-grow: 1;
   overflow-y: auto;
-  padding-right: 15px;
-  margin-bottom: 30px;
+  padding-right: 8px;
+  margin-bottom: 20px;
 }
 /* Custom scrollbar for grid */
 .ws-grid-container::-webkit-scrollbar { width: 6px; }
@@ -55,7 +57,7 @@
 .ws-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: 8px;
 }
 
 /* Card */
@@ -63,7 +65,7 @@
   position: relative;
   aspect-ratio: 4/5;
   background: linear-gradient(135deg, #7b5b8d 0%, #4a3e64 100%); /* 4-star default */
-  border-radius: 6px 20px 6px 6px; 
+  border-radius: 6px 18px 6px 6px; 
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
@@ -73,70 +75,88 @@
 .ws-card.rarity-5 {
   background: linear-gradient(135deg, #b07e36 0%, #835222 100%);
 }
-.ws-card:hover { border-color: #fff; transform: scale(1.02); }
+.ws-card.selected {
+  border-color: #ffe699;
+  box-shadow: 0 0 10px rgba(255, 230, 153, 0.8);
+}
+.ws-card:hover { border-color: #fff; transform: scale(1.03); }
 
 /* Card details */
 .ws-card-refine {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  background: rgba(0,0,0,0.5);
+  top: 3px;
+  left: 3px;
+  background: rgba(0,0,0,0.6);
   color: #ffcc32;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
   z-index: 2;
 }
 .ws-card-lock {
   position: absolute;
-  top: 28px;
-  left: 6px;
+  top: 22px;
+  left: 4px;
   color: #ff4757;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   z-index: 2;
+}
+.ws-card-equipped-avatar {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #ffcc32;
+  z-index: 2;
+  object-fit: cover;
+  background: rgba(0,0,0,0.5);
 }
 .ws-card-image {
   width: 100%;
   height: 100%;
-  /* Empty for now to act as placeholder */
 }
 .ws-card-bottom {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 10px;
+  padding-top: 6px;
 }
 .ws-card-stars {
   color: #ffcc32;
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  margin-bottom: 2px;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  margin-bottom: 1px;
 }
 .ws-card-level {
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: bold;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   width: 100%;
   text-align: center;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 /* Bottom Controls */
 .ws-bottom-controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 8px;
+  width: 100%;
+  padding-right: 8px; /* Alignment with grid container padding-right */
+  box-sizing: border-box;
 }
 .ws-icon-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #e6e2d8;
   color: #3b4255;
@@ -145,27 +165,37 @@
   justify-content: center;
   cursor: pointer;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.ws-icon-btn:hover {
+  background: #ffffff;
 }
 .ws-dropdown {
+  flex: 1;
   background: #e6e2d8;
   color: #3b4255;
   border-radius: 20px;
-  padding: 8px 20px;
+  padding: 6px 14px;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
   cursor: pointer;
+  transition: background 0.2s;
+}
+.ws-dropdown:hover {
+  background: #ffffff;
 }
 
 /* Top Right Global Buttons */
 .ws-global-buttons {
   position: absolute;
   top: 30px;
-  right: 6.5%;
+  right: 5%;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -176,15 +206,19 @@
   background: #e6e2d8;
   color: #3b4255;
   border-radius: 20px;
-  padding: 6px 24px;
+  padding: 6px 22px;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
   border: none;
   cursor: pointer;
+  transition: background 0.2s;
+}
+.ws-btn-compare:hover {
+  background: #ffffff;
 }
 .ws-btn-back {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: #e6e2d8;
   color: #3b4255;
@@ -194,5 +228,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  transition: background 0.2s;
+}
+.ws-btn-back:hover {
+  background: #ffffff;
 }
