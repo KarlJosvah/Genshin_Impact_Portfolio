@@ -3,10 +3,10 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface CharacterProps {
-  isWeaponSelectionOpen?: boolean;
+  isWeaponSectionActive?: boolean;
 }
 
-const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) => {
+const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) => {
   const { scene, animations } = useGLTF('/assets/models/Leonard.glb');
   const { actions, names, mixer } = useAnimations(animations, scene);
 
@@ -44,6 +44,13 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) 
     }
   }, [animations, mixer]);
 
+  const isWeaponSectionActiveRef = useRef(isWeaponSectionActive);
+  const activeOnFinishedRef = useRef<((e: any) => void) | null>(null);
+
+  useEffect(() => {
+    isWeaponSectionActiveRef.current = isWeaponSectionActive;
+  }, [isWeaponSectionActive]);
+
   useEffect(() => {
     const presentName = names.find(n => n.toLowerCase() === 'present') || 'Present';
     const idleName = names.find(n => n.toLowerCase() === 'idle') || 'Idle';
@@ -51,7 +58,13 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) 
     const presentAction = actions[presentName];
     const idleAction = actions[idleName];
 
-    if (isWeaponSelectionOpen) {
+    if (isWeaponSectionActive) {
+      // Clear any leftover event listener from random play loop
+      if (activeOnFinishedRef.current) {
+        mixer.removeEventListener('finished', activeOnFinishedRef.current);
+        activeOnFinishedRef.current = null;
+      }
+
       const modIdleAction = modifiedIdleActionRef.current || idleAction;
 
       if (presentAction) {
@@ -88,6 +101,8 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) 
       let timeoutId: number;
 
       const playRandom = () => {
+        if (isWeaponSectionActiveRef.current) return;
+
         // Filter out Idle, Present, and T-poses
         const available = names.filter(
           n => n.toLowerCase() !== "idle" && n.toLowerCase() !== "present" && n.toLowerCase() !== "t_pose" && n.toLowerCase() !== "t-pose"
@@ -106,20 +121,26 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) 
 
           const onFinished = (e: any) => {
             if (e.action === nextAction) {
-              mixer.removeEventListener('finished', onFinished);
+              if (activeOnFinishedRef.current === onFinished) {
+                mixer.removeEventListener('finished', onFinished);
+                activeOnFinishedRef.current = null;
+              }
 
-              idleAction.reset().fadeIn(0.5).play();
-              nextAction.fadeOut(0.5);
-
-              scheduleNext();
+              if (!isWeaponSectionActiveRef.current) {
+                idleAction.reset().fadeIn(0.5).play();
+                nextAction.fadeOut(0.5);
+                scheduleNext();
+              }
             }
           };
 
+          activeOnFinishedRef.current = onFinished;
           mixer.addEventListener('finished', onFinished);
         }
       };
 
       const scheduleNext = () => {
+        if (isWeaponSectionActiveRef.current) return;
         const delay = Math.random() * (15000 - 5000) + 5000;
         timeoutId = window.setTimeout(playRandom, delay);
       };
@@ -128,12 +149,16 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSelectionOpen = false }) 
 
       return () => {
         window.clearTimeout(timeoutId);
+        if (activeOnFinishedRef.current) {
+          mixer.removeEventListener('finished', activeOnFinishedRef.current);
+          activeOnFinishedRef.current = null;
+        }
         if (idleAction) {
           idleAction.fadeOut(0.3);
         }
       };
     }
-  }, [isWeaponSelectionOpen, actions, names, mixer]);
+  }, [isWeaponSectionActive, actions, names, mixer]);
 
   return (
     <primitive object={scene} position={[0, -1, 0]} scale={1} />
