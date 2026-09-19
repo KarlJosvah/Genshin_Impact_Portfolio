@@ -36,7 +36,7 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
           justifyContent: 'center'
         }}>
           <img 
-            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" 
+            src="/assets/images/svg-tech/react-original.svg" 
             alt="React" 
             className="weapon-image"
           />

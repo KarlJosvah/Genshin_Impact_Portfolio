@@ -33,7 +33,7 @@ const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
       <div className="weapon-selection-panel">
         <div className="ws-header">
           <img
-            src="/assets/images/svg/ATK.svg"
+            src="/assets/images/svg-gi/ATK.svg"
             alt="ATK"
             className="ws-header-icon"
           />

@@ -8,27 +8,27 @@ const ShurikenStar = ({ size = 25 }) => (
 );
 
 const HP_Icon = () => (
-  <img src="/assets/images/svg/HP.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/HP.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const ATK_Icon = () => (
-  <img src="/assets/images/svg/ATK.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/ATK.svg" alt="ATK" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const DEF_Icon = () => (
-  <img src="/assets/images/svg/DEF.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/DEF.svg" alt="DEF" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const EM_Icon = () => (
-  <img src="/assets/images/svg/EM.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/EM.svg" alt="EM" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const STA_Icon = () => (
-  <img src="/assets/images/svg/STA.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/STA.svg" alt="STA" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const FRI_Icon = () => (
-  <img src="/assets/images/svg/Friendship.svg" alt="HP" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/assets/images/svg-gi/Friendship.svg" alt="Friendship" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 const AttributesSection = () => {

@@ -44,7 +44,7 @@ const CharacterHeader: React.FC<CharacterHeaderProps> = ({ onClose }) => {
       <div className="header-left">
         <div className="vision-container" title="Geo Vision">
           <img
-            src="/assets/images/svg/geo.svg"
+            src="/assets/images/svg-gi/geo.svg"
             alt="Geo"
             className="vision-icon"
           />
