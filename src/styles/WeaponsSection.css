@@ -149,7 +149,7 @@
 .weapon-btn {
   background: #e6e2d8;
   color: #3b4255;
-  border: none;
+  border: 2px solid transparent;
   padding: 8px 30px;
   border-radius: 20px;
   font-size: 1.1rem;
@@ -160,30 +160,55 @@
 }
 
 .btn-switch.disabled {
-  opacity: 0.5;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 1;
   cursor: not-allowed;
   pointer-events: none;
+  box-shadow: none;
 }
 
 .equipped-badge {
-  position: absolute;
-  bottom: 50px;
-  right: 0;
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0;
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 15px 4px 4px;
-  border-radius: 25px;
-  gap: 10px;
+  padding: 0 20px 0 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
   color: #fff;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.equipped-avatar-wrapper {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  margin-top: -7px;
+  margin-bottom: -7px;
+  margin-left: -5px;
+  margin-right: 14px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 15;
 }
 
 .equipped-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  transform: scale(1.4) translateY(-14%) translateX(-2%);
 }
 
 .weapon-btn:hover {

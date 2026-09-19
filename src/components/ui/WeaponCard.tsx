@@ -24,11 +24,13 @@ const WeaponCard: React.FC<WeaponCardProps> = ({ weapon, isSelected, onClick }) 
       <div className="ws-card-refine">{weapon.refinement}</div>
       {weapon.isLocked && <div className="ws-card-lock">🔒</div>}
       {weapon.equippedAvatarSrc && (
-        <img
-          src={weapon.equippedAvatarSrc}
-          alt="Equipped avatar"
-          className="ws-card-equipped-avatar"
-        />
+        <div className="ws-card-equipped-badge">
+          <img
+            src={weapon.equippedAvatarSrc}
+            alt="Equipped avatar"
+            className="ws-card-equipped-avatar"
+          />
+        </div>
       )}
 
       {/* Placeholder empty div for weapon image */}

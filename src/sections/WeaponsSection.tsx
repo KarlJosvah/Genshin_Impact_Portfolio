@@ -2,8 +2,25 @@ import { useState } from 'react';
 import '../styles/WeaponsSection.css';
 import WeaponSelection from './WeaponSelection.tsx';
 
-const WeaponsSection = () => {
-  const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+interface WeaponsSectionProps {
+  isSelectionOpen?: boolean;
+  setIsSelectionOpen?: (open: boolean) => void;
+}
+
+const WeaponsSection: React.FC<WeaponsSectionProps> = ({
+  isSelectionOpen: propIsSelectionOpen,
+  setIsSelectionOpen: propSetIsSelectionOpen,
+}) => {
+  const [localIsSelectionOpen, localSetIsSelectionOpen] = useState(false);
+
+  const isSelectionOpen = propIsSelectionOpen !== undefined ? propIsSelectionOpen : localIsSelectionOpen;
+  const setIsSelectionOpen = (open: boolean) => {
+    if (propSetIsSelectionOpen) {
+      propSetIsSelectionOpen(open);
+    } else {
+      localSetIsSelectionOpen(open);
+    }
+  };
 
   return (
     <>
@@ -76,13 +93,20 @@ const WeaponsSection = () => {
         </p>
       </div>
 
-      <div className="weapon-actions">
-        {isSelectionOpen && (
-          <div className="equipped-badge">
-            <img src="/assets/images/side_icons/Albedo_Side_Icon.webp" alt="Albedo" className="equipped-avatar" />
-            <span>Equipped: Albedo</span>
+      {isSelectionOpen && (
+        <div className="equipped-badge">
+          <div className="equipped-avatar-wrapper">
+            <img
+              src="/assets/images/side_icons/Albedo_Side_Icon.webp"
+              alt="Albedo"
+              className="equipped-avatar"
+            />
           </div>
-        )}
+          <span>Equipped: Albedo</span>
+        </div>
+      )}
+
+      <div className="weapon-actions">
         <button 
           className={`weapon-btn btn-switch ${isSelectionOpen ? 'disabled' : ''}`}
           onClick={() => setIsSelectionOpen(true)}

@@ -55,14 +55,14 @@ const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
 
         <div className="ws-bottom-controls">
           <button className="ws-icon-btn" title="Filter">
-            ⧨
+            <img src="/assets/images/svg/filter.svg" alt="Filter" className="ws-btn-icon" />
           </button>
           <div className="ws-dropdown">
             <span>Quality</span>
             <span>▼</span>
           </div>
           <button className="ws-icon-btn" title="Sort">
-            ⇅
+            <img src="/assets/images/svg/sort.svg" alt="Sort" className="ws-btn-icon" />
           </button>
         </div>
       </div>
