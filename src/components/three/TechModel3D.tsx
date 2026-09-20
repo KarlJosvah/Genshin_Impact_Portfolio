@@ -7,12 +7,14 @@ interface TechModel3DProps {
   url?: string;
   position?: [number, number, number];
   scale?: number;
+  visible?: boolean;
 }
 
 const TechModel3D: React.FC<TechModel3DProps> = ({
   url = '/assets/images/svg-tech/react-original.svg',
   position = [-0.75, 0.45, 0.3],
   scale = 0.005,
+  visible = true,
 }) => {
   const svgData = useLoader(SVGLoader, url);
   const groupRef = useRef<THREE.Group>(null);
@@ -56,8 +58,8 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
 
   // Rotate model continuously for 3D showcase
   useFrame((_, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.8;
+    if (groupRef.current && visible) {
+      groupRef.current.rotation.y += delta * 1.5;
     }
   });
 
@@ -71,7 +73,7 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
   };
 
   return (
-    <group position={position}>
+    <group position={position} visible={visible}>
       <group
         ref={groupRef}
         scale={[scale, -scale, scale]} // Flip Y-axis to convert SVG coordinates to 3D space

@@ -4,9 +4,13 @@ import * as THREE from 'three';
 
 interface CharacterProps {
   isWeaponSectionActive?: boolean;
+  onPresentComplete?: (complete: boolean) => void;
 }
 
-const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) => {
+const Character: React.FC<CharacterProps> = ({
+  isWeaponSectionActive = false,
+  onPresentComplete,
+}) => {
   const { scene, animations } = useGLTF('/assets/models/Leonard.glb');
   const { actions, names, mixer } = useAnimations(animations, scene);
 
@@ -67,6 +71,8 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) 
 
       const modIdleAction = modifiedIdleActionRef.current || idleAction;
 
+      let onPresentFinished: ((e: any) => void) | null = null;
+
       if (presentAction) {
         // Fade out currently running actions smoothly to avoid T-pose snapping
         Object.values(actions).forEach(act => {
@@ -80,6 +86,14 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) 
           modIdleAction.reset().fadeIn(0.3).play();
         }
 
+        // Listen for completion of Present animation
+        onPresentFinished = (e: any) => {
+          if (e.action === presentAction) {
+            if (onPresentComplete) onPresentComplete(true);
+          }
+        };
+        mixer.addEventListener('finished', onPresentFinished);
+
         // Play the Present animation (only covers shoulder to hand, loop once, clamp final state)
         presentAction.reset();
         presentAction.setLoop(THREE.LoopOnce, 1);
@@ -90,9 +104,16 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) 
         if (idleAction) {
           idleAction.reset().fadeIn(0.3).play();
         }
+        if (onPresentComplete) onPresentComplete(true);
       }
 
       return () => {
+        if (onPresentFinished) {
+          mixer.removeEventListener('finished', onPresentFinished);
+        }
+        if (onPresentComplete) {
+          onPresentComplete(false);
+        }
         if (presentAction) presentAction.fadeOut(0.3);
         if (modIdleAction) modIdleAction.fadeOut(0.3);
       };
