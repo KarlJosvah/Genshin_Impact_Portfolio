@@ -68,8 +68,12 @@ const Character: React.FC<CharacterProps> = ({ isWeaponSectionActive = false }) 
       const modIdleAction = modifiedIdleActionRef.current || idleAction;
 
       if (presentAction) {
-        // Stop current actions
-        mixer.stopAllAction();
+        // Fade out currently running actions smoothly to avoid T-pose snapping
+        Object.values(actions).forEach(act => {
+          if (act && act !== modIdleAction && act !== presentAction) {
+            act.fadeOut(0.3);
+          }
+        });
 
         // Play the modified idle breathing animation (covers all other bones)
         if (modIdleAction) {
