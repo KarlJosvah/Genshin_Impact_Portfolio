@@ -25,23 +25,7 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
   return (
     <>
     <div className="sidebar-right weapon-container">
-      <div className="weapon-image-container">
-        {/* Placeholder for Tech Stack Icon/Logo */}
-        <div style={{ 
-          width: '300px', 
-          height: '300px', 
-          background: 'radial-gradient(circle, rgba(0, 229, 255, 0.2) 0%, transparent 70%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <img 
-            src="/assets/images/svg-tech/react-original.svg" 
-            alt="React" 
-            className="weapon-image"
-          />
-        </div>
-      </div>
+
 
       <div className="weapon-header">
         <h1 className="weapon-name">Cinnabar Spindle</h1>

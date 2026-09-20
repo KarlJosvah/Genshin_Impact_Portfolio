@@ -1,7 +1,9 @@
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls } from '@react-three/drei';
 import Character from './Character.tsx';
 import Pedestal from './Pedestal.tsx';
+import TechModel3D from './TechModel3D.tsx';
 
 interface SceneProps {
   isWeaponSectionActive?: boolean;
@@ -16,6 +18,16 @@ const Scene: React.FC<SceneProps> = ({ isWeaponSectionActive = false }) => {
 
       <Character isWeaponSectionActive={isWeaponSectionActive} />
       <Pedestal />
+
+      {isWeaponSectionActive && (
+        <Suspense fallback={null}>
+          <TechModel3D
+            url="/assets/images/svg-tech/react-original.svg"
+            position={[-0.75, 0.45, 0.3]}
+            scale={0.005}
+          />
+        </Suspense>
+      )}
 
       <OrbitControls
         enablePan={false}
