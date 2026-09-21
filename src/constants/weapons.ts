@@ -305,7 +305,7 @@ export const WEAPONS_DATA: WeaponItemData[] = [
     "passiveName": "Object Metaprogramming",
     "passiveDesc": "Dynamic object-oriented programming language designed for natural readability.",
     "description": "A dynamic, open-source programming language with a focus on simplicity and productivity.",
-    "svgPath": "/assets/images/svg-tech/ruby-original.svg"
+    "svgPath": "/assets/images/svg-tech/ruby-plain.svg"
   },
   {
     "id": "rust",
