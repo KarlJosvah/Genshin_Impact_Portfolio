@@ -78,28 +78,29 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
         </p>
       </div>
 
-      {isSelectionOpen && (
-        <div className="equipped-badge">
-          <div className="equipped-avatar-wrapper">
-            <img
-              src="/assets/images/side_icons/Albedo_Side_Icon.webp"
-              alt="Albedo"
-              className="equipped-avatar"
-            />
-          </div>
-          <span>Equipped: Albedo</span>
-        </div>
-      )}
-
       <div className="weapon-actions">
-        <button 
-          className={`weapon-btn btn-switch ${isSelectionOpen ? 'disabled' : ''}`}
-          onClick={() => setIsSelectionOpen(true)}
-          disabled={isSelectionOpen}
-        >
-          Switch
-        </button>
-        <button className="weapon-btn btn-enhance">Enhance</button>
+        {isSelectionOpen && selectedWeapon.isEquipped && (
+          <div className="equipped-badge">
+            <div className="equipped-avatar-wrapper">
+              <img
+                src="/assets/images/side_icons/Albedo_Side_Icon.webp"
+                alt="Albedo"
+                className="equipped-avatar"
+              />
+            </div>
+            <span>Equipped: Albedo</span>
+          </div>
+        )}
+        <div className="weapon-buttons-row">
+          <button 
+            className={`weapon-btn btn-switch ${isSelectionOpen ? 'disabled' : ''}`}
+            onClick={() => setIsSelectionOpen(true)}
+            disabled={isSelectionOpen}
+          >
+            Switch
+          </button>
+          <button className="weapon-btn btn-enhance">Enhance</button>
+        </div>
       </div>
     </div>
     {isSelectionOpen && (

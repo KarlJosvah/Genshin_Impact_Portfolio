@@ -140,10 +140,17 @@
   position: fixed;
   bottom: 40px;
   right: 6.5%;
+  width: 380px;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 15px;
   z-index: 100;
+}
+
+.weapon-buttons-row {
+  display: flex;
+  gap: 15px;
 }
 
 .weapon-btn {
@@ -178,7 +185,7 @@
   display: flex;
   align-items: center;
   padding: 0 20px 0 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   box-sizing: border-box;
   color: #fff;
   font-weight: 600;
