@@ -1972,22 +1972,6 @@ export const WEAPONS_DATA: WeaponItemData[] = [
     "svgPath": "/assets/images/svg-tech/prometheus-original.svg"
   },
   {
-    "id": "chrome",
-    "name": "Google Chrome",
-    "type": "Browser",
-    "rarity": 4,
-    "refinement": 5,
-    "level": 90,
-    "maxLevel": 90,
-    "baseAtk": 510,
-    "subStatName": "DevTools Suite",
-    "subStatValue": "55.1%",
-    "passiveName": "V8 Execution Engine",
-    "passiveDesc": "Provides live DOM debugging, network profiling, and Lighthouse performance auditing.",
-    "description": "The dominant web browser powering modern Web APIs and developer inspect tools.",
-    "svgPath": "/assets/images/svg-tech/chrome-original.svg"
-  },
-  {
     "id": "wordpress",
     "name": "WordPress",
     "type": "CMS",
