@@ -56,7 +56,7 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
       </div>
 
       <div className="weapon-level-box">
-        <span className="level-text">Lv. <span className="level-highlight">{selectedWeapon.level}</span>/{selectedWeapon.maxLevel}</span>
+        <span className="level-text">Lv. <span className="level-highlight">{selectedWeapon.level}</span><span className="level-max">/{selectedWeapon.maxLevel}</span></span>
         <div className="ascension-stars">
           {[1, 2, 3, 4, 5, 6].map(i => (
             <span key={i} className="ascension-star">✦</span>
