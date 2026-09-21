@@ -19,21 +19,71 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
   const svgData = useLoader(SVGLoader, url);
   const groupRef = useRef<THREE.Group>(null);
 
-  // Generate 3D extruded shapes from the parsed SVG paths
+  // Generate 3D extruded shapes from the parsed SVG paths with area-based Z-layering
   const { meshes, centerOffset } = useMemo(() => {
-    const meshesList: Array<{ shape: THREE.Shape; color: string }> = [];
+    const items: Array<{
+      shape: THREE.Shape;
+      color: string;
+      area: number;
+    }> = [];
 
     svgData.paths.forEach((path) => {
-      // Extract color from SVG path or fallback to React cyan
       const colorHex = path.color ? `#${path.color.getHexString()}` : '#61DAFB';
       const shapes = SVGLoader.createShapes(path);
 
       shapes.forEach((shape) => {
-        meshesList.push({ shape, color: colorHex });
+        // Calculate shape bounding box area
+        const points = shape.getPoints();
+        let minX = Infinity, maxX = -Infinity;
+        let minY = Infinity, maxY = -Infinity;
+        points.forEach((p) => {
+          if (p.x < minX) minX = p.x;
+          if (p.x > maxX) maxX = p.x;
+          if (p.y < minY) minY = p.y;
+          if (p.y > maxY) maxY = p.y;
+        });
+        const w = isFinite(maxX - minX) ? maxX - minX : 0;
+        const h = isFinite(maxY - minY) ? maxY - minY : 0;
+        const area = w * h;
+
+        items.push({ shape, color: colorHex, area });
       });
     });
 
-    // Compute bounding box to center the pivot point
+    let maxArea = 0;
+    items.forEach((item) => {
+      if (item.area > maxArea) maxArea = item.area;
+    });
+
+    // Group items into Z-offset layers based on area ratio relative to largest shape
+    const meshesList = items.map((item, originalIdx) => {
+      const ratio = maxArea > 0 ? item.area / maxArea : 1;
+      let layerZOffset = 0;
+      let depth = 3;
+
+      if (ratio >= 0.25) {
+        // Large background shape (e.g. background shield / main body)
+        layerZOffset = 0;
+        depth = 3;
+      } else if (ratio >= 0.02) {
+        // Medium foreground detail (e.g. letters, main logos)
+        layerZOffset = 3.05;
+        depth = 1.5;
+      } else {
+        // Fine foreground accents (e.g. dots, small pupils)
+        layerZOffset = 4.6;
+        depth = 1.0;
+      }
+
+      return {
+        ...item,
+        originalIdx,
+        zOffset: layerZOffset,
+        depth,
+      };
+    });
+
+    // Compute overall bounding box center for pivot alignment
     let minX = Infinity, maxX = -Infinity;
     let minY = Infinity, maxY = -Infinity;
 
@@ -59,18 +109,9 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
   // Rotate model continuously for 3D showcase
   useFrame((_, delta) => {
     if (groupRef.current && visible) {
-      groupRef.current.rotation.y += delta * 1.5;
+      groupRef.current.rotation.y += delta * 0.8;
     }
   });
-
-  const extrudeSettings: THREE.ExtrudeGeometryOptions = {
-    depth: 4,
-    bevelEnabled: true,
-    bevelSegments: 3,
-    steps: 1,
-    bevelSize: 0.8,
-    bevelThickness: 0.8,
-  };
 
   return (
     <group position={position} visible={visible}>
@@ -79,21 +120,32 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
         scale={[scale, -scale, scale]} // Flip Y-axis to convert SVG coordinates to 3D space
       >
         <group position={[-centerOffset[0], -centerOffset[1], 0]}>
-          {meshes.map(({ shape, color }, idx) => (
-            <mesh key={idx} position={[0, 0, idx * 0.2]}>
-              <extrudeGeometry args={[shape, extrudeSettings]} />
-              <meshStandardMaterial
-                color={color}
-                roughness={0.2}
-                metalness={0.4}
-                emissive={color}
-                emissiveIntensity={0.2}
-                polygonOffset={true}
-                polygonOffsetFactor={-idx * 2}
-                polygonOffsetUnits={-idx * 2}
-              />
-            </mesh>
-          ))}
+          {meshes.map(({ shape, color, zOffset, depth, originalIdx }) => {
+            const extrudeSettings: THREE.ExtrudeGeometryOptions = {
+              depth,
+              bevelEnabled: true,
+              bevelSegments: 2,
+              steps: 1,
+              bevelSize: 0.15,
+              bevelThickness: 0.2,
+            };
+
+            return (
+              <mesh key={originalIdx} position={[0, 0, zOffset]}>
+                <extrudeGeometry args={[shape, extrudeSettings]} />
+                <meshStandardMaterial
+                  color={color}
+                  roughness={0.25}
+                  metalness={0.3}
+                  emissive={color}
+                  emissiveIntensity={0.15}
+                  polygonOffset={true}
+                  polygonOffsetFactor={-originalIdx}
+                  polygonOffsetUnits={-originalIdx}
+                />
+              </mesh>
+            );
+          })}
         </group>
       </group>
     </group>
