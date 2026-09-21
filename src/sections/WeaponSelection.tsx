@@ -1,6 +1,6 @@
 import React from 'react';
 import WeaponCard from '../components/ui/WeaponCard.tsx';
-import { WEAPONS_DATA, type WeaponItemData } from '../constants/weapons.ts';
+import { WEAPONS_DATA, EQUIPPED_WEAPON, type WeaponItemData } from '../constants/weapons.ts';
 import '../styles/WeaponSelection.css';
 
 interface WeaponSelectionProps {
@@ -14,12 +14,18 @@ const WeaponSelection: React.FC<WeaponSelectionProps> = ({
   selectedWeapon,
   onSelectWeapon,
 }) => {
+  const handleClose = () => {
+    const equippedWeapon = WEAPONS_DATA.find(w => w.isEquipped) || EQUIPPED_WEAPON;
+    onSelectWeapon(equippedWeapon);
+    onClose();
+  };
+
   return (
     <div className="weapon-selection-overlay">
       {/* Top Right Global Buttons */}
       <div className="ws-global-buttons">
         <button className="ws-btn-compare">Compare</button>
-        <button className="ws-btn-back" onClick={onClose} aria-label="Back">
+        <button className="ws-btn-back" onClick={handleClose} aria-label="Back">
           ↶
         </button>
       </div>
