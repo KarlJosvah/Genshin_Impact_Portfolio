@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
-import WeaponCard, { type WeaponItem } from '../components/ui/WeaponCard.tsx';
+import React from 'react';
+import WeaponCard from '../components/ui/WeaponCard.tsx';
+import { WEAPONS_DATA, type WeaponItemData } from '../constants/weapons.ts';
 import '../styles/WeaponSelection.css';
 
 interface WeaponSelectionProps {
   onClose: () => void;
+  selectedWeapon: WeaponItemData;
+  onSelectWeapon: (weapon: WeaponItemData) => void;
 }
 
-const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
-  const [selectedId, setSelectedId] = useState<number>(0);
-
-  // Generate placeholder weapons (a mix of 4 and 5 stars)
-  const weapons: WeaponItem[] = Array.from({ length: 24 }, (_, i) => ({
-    id: i,
-    rarity: i % 5 === 0 ? 5 : 4,
-    refinement: Math.floor(Math.random() * 5) + 1,
-    level: 90,
-    isLocked: i % 3 === 0,
-    equippedAvatarSrc: i === 0 ? '/assets/images/side_icons/Albedo_Side_Icon.webp' : undefined,
-  }));
-
+const WeaponSelection: React.FC<WeaponSelectionProps> = ({
+  onClose,
+  selectedWeapon,
+  onSelectWeapon,
+}) => {
   return (
     <div className="weapon-selection-overlay">
       {/* Top Right Global Buttons */}
@@ -42,12 +37,12 @@ const WeaponSelection: React.FC<WeaponSelectionProps> = ({ onClose }) => {
 
         <div className="ws-grid-container">
           <div className="ws-grid">
-            {weapons.map(weapon => (
+            {WEAPONS_DATA.map(weapon => (
               <WeaponCard
                 key={weapon.id}
                 weapon={weapon}
-                isSelected={selectedId === weapon.id}
-                onClick={() => setSelectedId(weapon.id)}
+                isSelected={selectedWeapon.id === weapon.id}
+                onClick={() => onSelectWeapon(weapon)}
               />
             ))}
           </div>

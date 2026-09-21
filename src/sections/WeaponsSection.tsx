@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import '../styles/WeaponsSection.css';
 import WeaponSelection from './WeaponSelection.tsx';
+import { EQUIPPED_WEAPON, type WeaponItemData } from '../constants/weapons.ts';
 
 interface WeaponsSectionProps {
   isSelectionOpen?: boolean;
   setIsSelectionOpen?: (open: boolean) => void;
+  selectedWeapon?: WeaponItemData;
+  onSelectWeapon?: (weapon: WeaponItemData) => void;
 }
 
 const WeaponsSection: React.FC<WeaponsSectionProps> = ({
   isSelectionOpen: propIsSelectionOpen,
   setIsSelectionOpen: propSetIsSelectionOpen,
+  selectedWeapon = EQUIPPED_WEAPON,
+  onSelectWeapon = () => {},
 }) => {
   const [localIsSelectionOpen, localSetIsSelectionOpen] = useState(false);
 
@@ -25,35 +30,33 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
   return (
     <>
     <div className="sidebar-right weapon-container">
-
-
       <div className="weapon-header">
-        <h1 className="weapon-name">Cinnabar Spindle</h1>
+        <h1 className="weapon-name">{selectedWeapon.name}</h1>
         <div className="weapon-type-row">
-          <span className="weapon-type">Sword</span>
-          <span className="weapon-lock">🔒</span>
+          <span className="weapon-type">{selectedWeapon.type}</span>
+          <span className="weapon-lock">{selectedWeapon.isLocked ? '🔒' : '🔓'}</span>
         </div>
       </div>
 
       <div className="weapon-main-stats">
         <div className="weapon-stat-row">
           <span className="weapon-stat-label">Base ATK</span>
-          <span className="weapon-stat-value">454</span>
+          <span className="weapon-stat-value">{selectedWeapon.baseAtk}</span>
         </div>
         <div className="weapon-stat-row">
-          <span className="weapon-stat-label">DEF</span>
-          <span className="weapon-stat-value">69.0%</span>
+          <span className="weapon-stat-label">{selectedWeapon.subStatName}</span>
+          <span className="weapon-stat-value">{selectedWeapon.subStatValue}</span>
         </div>
       </div>
 
       <div className="weapon-rarity">
-        {[1, 2, 3, 4].map(i => (
+        {Array.from({ length: selectedWeapon.rarity }).map((_, i) => (
           <span key={i} className="star-icon">★</span>
         ))}
       </div>
 
       <div className="weapon-level-box">
-        <span className="level-text">Lv. <span className="level-highlight">90</span>/90</span>
+        <span className="level-text">Lv. <span className="level-highlight">{selectedWeapon.level}</span>/{selectedWeapon.maxLevel}</span>
         <div className="ascension-stars">
           {[1, 2, 3, 4, 5, 6].map(i => (
             <span key={i} className="ascension-star">✦</span>
@@ -62,18 +65,16 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
       </div>
 
       <div className="weapon-passive">
-        <div className="weapon-refine">Refinement Rank 5</div>
-        <div className="weapon-passive-name">Spotless Heart</div>
+        <div className="weapon-refine">Refinement Rank {selectedWeapon.refinement}</div>
+        <div className="weapon-passive-name">{selectedWeapon.passiveName}</div>
         <p className="weapon-passive-desc">
-          · Elemental Skill DMG is increased by <span className="highlight-cyan">80%</span> of DEF. 
-          The effect will be triggered no more than once every 1.5s and will be cleared 0.1s after the 
-          Elemental Skill deals DMG.
+          · {selectedWeapon.passiveDesc}
         </p>
       </div>
 
       <div className="description-container">
         <p className="description-text">
-          A sword made from materials that do not belong in this world. The power within might even be able to withstand the corruption of a venom that could corrode a mighty dragon.
+          {selectedWeapon.description}
         </p>
       </div>
 
@@ -101,7 +102,13 @@ const WeaponsSection: React.FC<WeaponsSectionProps> = ({
         <button className="weapon-btn btn-enhance">Enhance</button>
       </div>
     </div>
-    {isSelectionOpen && <WeaponSelection onClose={() => setIsSelectionOpen(false)} />}
+    {isSelectionOpen && (
+      <WeaponSelection
+        onClose={() => setIsSelectionOpen(false)}
+        selectedWeapon={selectedWeapon}
+        onSelectWeapon={onSelectWeapon}
+      />
+    )}
     </>
   );
 };

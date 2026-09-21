@@ -1,16 +1,8 @@
 import React from 'react';
-
-export interface WeaponItem {
-  id: number;
-  rarity: number;
-  refinement: number;
-  level: number;
-  isLocked: boolean;
-  equippedAvatarSrc?: string;
-}
+import type { WeaponItemData } from '../../constants/weapons.ts';
 
 interface WeaponCardProps {
-  weapon: WeaponItem;
+  weapon: WeaponItemData;
   isSelected?: boolean;
   onClick?: () => void;
 }
@@ -23,18 +15,24 @@ const WeaponCard: React.FC<WeaponCardProps> = ({ weapon, isSelected, onClick }) 
     >
       <div className="ws-card-refine">{weapon.refinement}</div>
       {weapon.isLocked && <div className="ws-card-lock">🔒</div>}
-      {weapon.equippedAvatarSrc && (
+      {weapon.isEquipped && (
         <div className="ws-card-equipped-badge">
           <img
-            src={weapon.equippedAvatarSrc}
+            src="/assets/images/side_icons/Albedo_Side_Icon.webp"
             alt="Equipped avatar"
             className="ws-card-equipped-avatar"
           />
         </div>
       )}
 
-      {/* Placeholder empty div for weapon image */}
-      <div className="ws-card-image" />
+      {/* Tech SVG Logo */}
+      <div className="ws-card-image">
+        <img
+          src={weapon.svgPath}
+          alt={weapon.name}
+          className="ws-card-tech-svg"
+        />
+      </div>
 
       <div className="ws-card-bottom">
         <div className="ws-card-stars">

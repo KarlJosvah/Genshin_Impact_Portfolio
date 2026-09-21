@@ -7,12 +7,14 @@ import AttributesSection from './sections/AttributesSection.tsx';
 import WeaponsSection from './sections/WeaponsSection.tsx';
 import TalentsSection from './sections/TalentsSection.tsx';
 import ConstellationSection from './sections/ConstellationSection.tsx';
+import { EQUIPPED_WEAPON, type WeaponItemData } from './constants/weapons.ts';
 import './styles/main.css';
 import './styles/genshinTheme.css';
 
 function App() {
   const [activeSection, setActiveSection] = useState<MenuType>(MenuType.Attributes);
   const [isWeaponSelectionOpen, setIsWeaponSelectionOpen] = useState(false);
+  const [selectedWeapon, setSelectedWeapon] = useState<WeaponItemData>(EQUIPPED_WEAPON);
 
   const isWeaponSectionActive = activeSection === MenuType.Weapons;
 
@@ -30,6 +32,8 @@ function App() {
           <WeaponsSection
             isSelectionOpen={isWeaponSelectionOpen}
             setIsSelectionOpen={setIsWeaponSelectionOpen}
+            selectedWeapon={selectedWeapon}
+            onSelectWeapon={setSelectedWeapon}
           />
         );
       case MenuType.Talents:
@@ -44,7 +48,10 @@ function App() {
   return (
     <div className="genshin-container">
       {!isWeaponSelectionOpen && <CharacterHeader />}
-      <Scene isWeaponSectionActive={isWeaponSectionActive} />
+      <Scene
+        isWeaponSectionActive={isWeaponSectionActive}
+        selectedWeaponUrl={selectedWeapon.svgPath}
+      />
       <SideMenu activeSection={activeSection} onSectionChange={handleSectionChange} />
       {renderSection()}
     </div>

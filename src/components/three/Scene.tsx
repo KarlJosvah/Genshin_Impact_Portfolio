@@ -7,9 +7,13 @@ import TechModel3D from './TechModel3D.tsx';
 
 interface SceneProps {
   isWeaponSectionActive?: boolean;
+  selectedWeaponUrl?: string;
 }
 
-const Scene: React.FC<SceneProps> = ({ isWeaponSectionActive = false }) => {
+const Scene: React.FC<SceneProps> = ({
+  isWeaponSectionActive = false,
+  selectedWeaponUrl = '/assets/images/svg-tech/react-original.svg',
+}) => {
   const [isPresentComplete, setIsPresentComplete] = useState(false);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ const Scene: React.FC<SceneProps> = ({ isWeaponSectionActive = false }) => {
       {isWeaponSectionActive && (
         <Suspense fallback={null}>
           <TechModel3D
-            url="/assets/images/svg-tech/react-original.svg"
+            url={selectedWeaponUrl}
             position={[0.4, 0.35, 0.3]}
             scale={0.003}
             visible={isPresentComplete}
