@@ -28,7 +28,22 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
     }> = [];
 
     svgData.paths.forEach((path) => {
-      const colorHex = path.color ? `#${path.color.getHexString()}` : '#61DAFB';
+      // Extract color from path style attributes if SVGLoader defaulted to white/missing color
+      let colorHex = path.color ? `#${path.color.getHexString()}` : '';
+      
+      const style = path.userData?.style;
+      const node = path.userData?.node;
+      const nodeFill = node?.getAttribute?.('fill') || node?.style?.fill || style?.fill;
+      
+      if (nodeFill && nodeFill !== 'none' && !nodeFill.startsWith('url(')) {
+        colorHex = nodeFill.startsWith('#') ? nodeFill : nodeFill;
+      }
+      
+      // Fallback if color is empty or undefined
+      if (!colorHex || colorHex === '#') {
+        colorHex = '#61DAFB';
+      }
+
       const shapes = SVGLoader.createShapes(path);
 
       shapes.forEach((shape) => {
