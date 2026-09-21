@@ -186,7 +186,7 @@ const Character: React.FC<CharacterProps> = ({
   }, [isWeaponSectionActive, actions, names, mixer]);
 
   return (
-    <primitive object={scene} position={[0, -1, 0]} scale={1} />
+    <primitive object={scene} position={[0, 0, 0]} scale={1} />
   );
 };
 
