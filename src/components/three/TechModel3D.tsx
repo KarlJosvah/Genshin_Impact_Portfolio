@@ -80,7 +80,7 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
       >
         <group position={[-centerOffset[0], -centerOffset[1], 0]}>
           {meshes.map(({ shape, color }, idx) => (
-            <mesh key={idx}>
+            <mesh key={idx} position={[0, 0, idx * 0.2]}>
               <extrudeGeometry args={[shape, extrudeSettings]} />
               <meshStandardMaterial
                 color={color}
@@ -88,6 +88,9 @@ const TechModel3D: React.FC<TechModel3DProps> = ({
                 metalness={0.4}
                 emissive={color}
                 emissiveIntensity={0.2}
+                polygonOffset={true}
+                polygonOffsetFactor={-idx * 2}
+                polygonOffsetUnits={-idx * 2}
               />
             </mesh>
           ))}

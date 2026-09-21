@@ -33,7 +33,6 @@ export const WEAPONS_DATA: WeaponItemData[] = [
     passiveDesc: 'Increases Render Efficiency by 80%. Re-renders occur 50% faster when state changes.',
     description: 'A component-based UI framework forged in Meta labs, capable of reactive UI rendering with unmatched precision.',
     svgPath: '/assets/images/svg-tech/react-original.svg',
-    isEquipped: true,
   },
   {
     id: 'typescript',
@@ -114,6 +113,7 @@ export const WEAPONS_DATA: WeaponItemData[] = [
     passiveDesc: 'Cross-platform compatibility protects against environment vulnerabilities.',
     description: 'A battle-tested enterprise language running on billions of devices worldwide.',
     svgPath: '/assets/images/svg-tech/java-original.svg',
+    isEquipped: true,
   },
   {
     id: 'python',
