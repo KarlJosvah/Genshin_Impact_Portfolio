@@ -12,7 +12,13 @@ interface SceneProps {
   selectedWeaponUrl?: string;
 }
 
-const SmoothCameraController: React.FC = () => {
+interface SmoothCameraControllerProps {
+  isWeaponSectionActive?: boolean;
+}
+
+const SmoothCameraController: React.FC<SmoothCameraControllerProps> = ({
+  isWeaponSectionActive = false,
+}) => {
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
@@ -20,43 +26,110 @@ const SmoothCameraController: React.FC = () => {
   // World Y = 1.0 is chest/torso height, World Y = 1.45 is head level
   const normalTargetY = 1.0;
   const headTargetY = 1.45;
-  const currentTargetY = useRef(normalTargetY);
 
-  // Zoom distance thresholds for transition
-  const minDist = 1.8;
-  const maxDist = 3.5;
+  const activeZoomDist = 2.15;
+  const normalZoomDist = 3.5;
+
+  const currentTargetY = useRef(normalTargetY);
+  const currentCamDist = useRef(normalZoomDist);
+
+  // Track state transitions
+  const wasActiveRef = useRef(isWeaponSectionActive);
 
   useFrame((_, delta) => {
     if (!controlsRef.current) return;
 
-    // Calculate distance from camera position to current OrbitControls target
-    const dist = camera.position.distanceTo(controlsRef.current.target);
+    if (isWeaponSectionActive) {
+      // Smoothly transition target Y to head level (1.45)
+      currentTargetY.current = THREE.MathUtils.damp(
+        currentTargetY.current,
+        headTargetY,
+        6,
+        delta
+      );
 
-    // Calculate zoom ratio: 1.0 when fully zoomed in (dist <= 2.0), 0.0 when zoomed out (dist >= 3.2)
-    const t = THREE.MathUtils.clamp((3.2 - dist) / (3.2 - 2.0), 0, 1);
+      // Smoothly transition distance to focused head zoom distance (2.15)
+      currentCamDist.current = THREE.MathUtils.damp(
+        currentCamDist.current,
+        activeZoomDist,
+        6,
+        delta
+      );
 
-    // Desired Y target height
-    const desiredTargetY = THREE.MathUtils.lerp(normalTargetY, headTargetY, t);
+      controlsRef.current.target.setY(currentTargetY.current);
 
-    // Damp current target.y for silky smooth movement
-    currentTargetY.current = THREE.MathUtils.damp(
-      currentTargetY.current,
-      desiredTargetY,
-      6,
-      delta
-    );
+      const dir = new THREE.Vector3()
+        .subVectors(camera.position, controlsRef.current.target)
+        .normalize();
 
-    controlsRef.current.target.setY(currentTargetY.current);
-    controlsRef.current.update();
+      camera.position.copy(controlsRef.current.target).add(dir.multiplyScalar(currentCamDist.current));
+      controlsRef.current.update();
+    } else {
+      // If we just exited WeaponsSection, smoothly animate back to normal camera distance and height
+      if (wasActiveRef.current) {
+        currentTargetY.current = THREE.MathUtils.damp(
+          currentTargetY.current,
+          normalTargetY,
+          6,
+          delta
+        );
+
+        currentCamDist.current = THREE.MathUtils.damp(
+          currentCamDist.current,
+          normalZoomDist,
+          6,
+          delta
+        );
+
+        controlsRef.current.target.setY(currentTargetY.current);
+
+        const dir = new THREE.Vector3()
+          .subVectors(camera.position, controlsRef.current.target)
+          .normalize();
+
+        camera.position.copy(controlsRef.current.target).add(dir.multiplyScalar(currentCamDist.current));
+        controlsRef.current.update();
+
+        // Check if transition back is essentially complete
+        if (
+          Math.abs(currentTargetY.current - normalTargetY) < 0.01 &&
+          Math.abs(currentCamDist.current - normalZoomDist) < 0.01
+        ) {
+          wasActiveRef.current = false;
+        }
+      } else {
+        // Normal interactive orbit controls mode when outside WeaponsSection
+        // Smoothly adjust target.y based on manual user zoom
+        const currentDist = camera.position.distanceTo(controlsRef.current.target);
+        const t = THREE.MathUtils.clamp((3.5 - currentDist) / (3.5 - 1.8), 0, 1);
+        const desiredY = THREE.MathUtils.lerp(normalTargetY, headTargetY, t);
+
+        currentTargetY.current = THREE.MathUtils.damp(
+          currentTargetY.current,
+          desiredY,
+          6,
+          delta
+        );
+
+        controlsRef.current.target.setY(currentTargetY.current);
+        controlsRef.current.update();
+      }
+    }
   });
+
+  useEffect(() => {
+    if (isWeaponSectionActive) {
+      wasActiveRef.current = true;
+    }
+  }, [isWeaponSectionActive]);
 
   return (
     <OrbitControls
       ref={controlsRef}
       enablePan={false}
-      enableZoom={true}
-      minDistance={minDist}
-      maxDistance={maxDist}
+      enableZoom={!isWeaponSectionActive}
+      minDistance={1.8}
+      maxDistance={3.5}
       minPolarAngle={0}
       maxPolarAngle={Math.PI}
       target={[0, normalTargetY, 0]}
@@ -99,7 +172,7 @@ const Scene: React.FC<SceneProps> = ({
         </Suspense>
       )}
 
-      <SmoothCameraController />
+      <SmoothCameraController isWeaponSectionActive={isWeaponSectionActive} />
 
       <Environment preset="city" />
     </Canvas>
