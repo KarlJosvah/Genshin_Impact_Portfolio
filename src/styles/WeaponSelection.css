@@ -72,8 +72,20 @@
   transition: all 0.2s;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
+.ws-card.rarity-1 {
+  background: linear-gradient(135deg, #74797e 0%, #515458 100%); /* 1-Star Light Grey/Dark Grey */
+}
+.ws-card.rarity-2 {
+  background: linear-gradient(135deg, #497d74 0%, #2b524a 100%); /* 2-Star Green/Teal */
+}
+.ws-card.rarity-3 {
+  background: linear-gradient(135deg, #517a9e 0%, #324c65 100%); /* 3-Star Blue */
+}
+.ws-card.rarity-4 {
+  background: linear-gradient(135deg, #7b5b8d 0%, #4a3e64 100%); /* 4-Star Purple */
+}
 .ws-card.rarity-5 {
-  background: linear-gradient(135deg, #b07e36 0%, #835222 100%);
+  background: linear-gradient(135deg, #b07e36 0%, #835222 100%); /* 5-Star Gold/Orange */
 }
 .ws-card.selected {
   border-color: #ffe699;
