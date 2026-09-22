@@ -7,6 +7,29 @@ import Character from './Character.tsx';
 import Pedestal from './Pedestal.tsx';
 import TechModel3D from './TechModel3D.tsx';
 
+// ============================================================================
+// CAMERA CONFIGURATION & BEHAVIOR SETTINGS
+// Adjust these parameters to easily tweak camera zoom, focus height, and damping speed.
+// ============================================================================
+export const CAMERA_CONFIG = {
+  // FOV and Initial Position
+  FOV: 45,
+  INITIAL_POSITION: [0, 1.0, 3.5] as [number, number, number],
+
+  // Target Y Heights (World Y = 0 is character feet)
+  NORMAL_TARGET_Y: 1.0,   // Chest/torso height in normal view
+  HEAD_TARGET_Y: 1.45,    // Head level height when focused/zoomed
+
+  // Camera Zoom Distances
+  NORMAL_ZOOM_DIST: 3.5,  // Default zoom distance outside WeaponsSection
+  ACTIVE_ZOOM_DIST: 2.15, // Focused zoom distance inside WeaponsSection
+  MIN_DISTANCE: 1.8,      // Minimum allowed OrbitControls zoom distance
+  MAX_DISTANCE: 3.5,      // Maximum allowed OrbitControls zoom distance
+
+  // Transition Damping Speed (higher = faster transition)
+  DAMP_SPEED: 6,
+};
+
 interface SceneProps {
   isWeaponSectionActive?: boolean;
   selectedWeaponUrl?: string;
@@ -22,37 +45,37 @@ const SmoothCameraController: React.FC<SmoothCameraControllerProps> = ({
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
-  // Character is placed at y = 0.0 in world space
-  // World Y = 1.0 is chest/torso height, World Y = 1.45 is head level
-  const normalTargetY = 1.0;
-  const headTargetY = 1.45;
-
-  const activeZoomDist = 2.15;
-  const normalZoomDist = 3.5;
-
-  const currentTargetY = useRef(normalTargetY);
-  const currentCamDist = useRef(normalZoomDist);
+  const currentTargetY = useRef(CAMERA_CONFIG.NORMAL_TARGET_Y);
+  const currentCamDist = useRef(CAMERA_CONFIG.NORMAL_ZOOM_DIST);
 
   // Track state transitions
   const wasActiveRef = useRef(isWeaponSectionActive);
+  const prevIsWeaponSectionActive = useRef(isWeaponSectionActive);
 
   useFrame((_, delta) => {
     if (!controlsRef.current) return;
 
     if (isWeaponSectionActive) {
-      // Smoothly transition target Y to head level (1.45)
+      // If we just entered WeaponSection, sync current values to current camera position & target
+      if (!prevIsWeaponSectionActive.current) {
+        currentCamDist.current = camera.position.distanceTo(controlsRef.current.target);
+        currentTargetY.current = controlsRef.current.target.y;
+        prevIsWeaponSectionActive.current = true;
+      }
+
+      // Smoothly transition target Y to head level
       currentTargetY.current = THREE.MathUtils.damp(
         currentTargetY.current,
-        headTargetY,
-        6,
+        CAMERA_CONFIG.HEAD_TARGET_Y,
+        CAMERA_CONFIG.DAMP_SPEED,
         delta
       );
 
-      // Smoothly transition distance to focused head zoom distance (2.15)
+      // Smoothly transition distance to focused head zoom distance
       currentCamDist.current = THREE.MathUtils.damp(
         currentCamDist.current,
-        activeZoomDist,
-        6,
+        CAMERA_CONFIG.ACTIVE_ZOOM_DIST,
+        CAMERA_CONFIG.DAMP_SPEED,
         delta
       );
 
@@ -69,15 +92,15 @@ const SmoothCameraController: React.FC<SmoothCameraControllerProps> = ({
       if (wasActiveRef.current) {
         currentTargetY.current = THREE.MathUtils.damp(
           currentTargetY.current,
-          normalTargetY,
-          6,
+          CAMERA_CONFIG.NORMAL_TARGET_Y,
+          CAMERA_CONFIG.DAMP_SPEED,
           delta
         );
 
         currentCamDist.current = THREE.MathUtils.damp(
           currentCamDist.current,
-          normalZoomDist,
-          6,
+          CAMERA_CONFIG.NORMAL_ZOOM_DIST,
+          CAMERA_CONFIG.DAMP_SPEED,
           delta
         );
 
@@ -92,22 +115,33 @@ const SmoothCameraController: React.FC<SmoothCameraControllerProps> = ({
 
         // Check if transition back is essentially complete
         if (
-          Math.abs(currentTargetY.current - normalTargetY) < 0.01 &&
-          Math.abs(currentCamDist.current - normalZoomDist) < 0.01
+          Math.abs(currentTargetY.current - CAMERA_CONFIG.NORMAL_TARGET_Y) < 0.01 &&
+          Math.abs(currentCamDist.current - CAMERA_CONFIG.NORMAL_ZOOM_DIST) < 0.01
         ) {
           wasActiveRef.current = false;
         }
       } else {
+        // Track state for next active transition
+        prevIsWeaponSectionActive.current = false;
+
         // Normal interactive orbit controls mode when outside WeaponsSection
         // Smoothly adjust target.y based on manual user zoom
         const currentDist = camera.position.distanceTo(controlsRef.current.target);
-        const t = THREE.MathUtils.clamp((3.5 - currentDist) / (3.5 - 1.8), 0, 1);
-        const desiredY = THREE.MathUtils.lerp(normalTargetY, headTargetY, t);
+        const t = THREE.MathUtils.clamp(
+          (CAMERA_CONFIG.MAX_DISTANCE - currentDist) / (CAMERA_CONFIG.MAX_DISTANCE - CAMERA_CONFIG.MIN_DISTANCE),
+          0,
+          1
+        );
+        const desiredY = THREE.MathUtils.lerp(
+          CAMERA_CONFIG.NORMAL_TARGET_Y,
+          CAMERA_CONFIG.HEAD_TARGET_Y,
+          t
+        );
 
         currentTargetY.current = THREE.MathUtils.damp(
           currentTargetY.current,
           desiredY,
-          6,
+          CAMERA_CONFIG.DAMP_SPEED,
           delta
         );
 
@@ -128,11 +162,11 @@ const SmoothCameraController: React.FC<SmoothCameraControllerProps> = ({
       ref={controlsRef}
       enablePan={false}
       enableZoom={!isWeaponSectionActive}
-      minDistance={1.8}
-      maxDistance={3.5}
+      minDistance={CAMERA_CONFIG.MIN_DISTANCE}
+      maxDistance={CAMERA_CONFIG.MAX_DISTANCE}
       minPolarAngle={0}
       maxPolarAngle={Math.PI}
-      target={[0, normalTargetY, 0]}
+      target={[0, CAMERA_CONFIG.NORMAL_TARGET_Y, 0]}
     />
   );
 };
@@ -150,7 +184,10 @@ const Scene: React.FC<SceneProps> = ({
   }, [isWeaponSectionActive]);
 
   return (
-    <Canvas camera={{ position: [0, 1.0, 3.5], fov: 45 }} className="three-canvas">
+    <Canvas
+      camera={{ position: CAMERA_CONFIG.INITIAL_POSITION, fov: CAMERA_CONFIG.FOV }}
+      className="three-canvas"
+    >
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
       <pointLight position={[-10, -10, -10]} />
