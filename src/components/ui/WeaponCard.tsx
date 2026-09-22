@@ -13,7 +13,9 @@ const WeaponCard: React.FC<WeaponCardProps> = ({ weapon, isSelected, onClick }) 
       className={`ws-card rarity-${weapon.rarity} ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
     >
-      <div className="ws-card-refine">{weapon.refinement}</div>
+      <div className={`ws-card-refine ${weapon.refinement === 5 ? 'max-refine' : ''}`}>
+        {weapon.refinement}
+      </div>
       {weapon.isLocked && <div className="ws-card-lock">🔒</div>}
       {weapon.isEquipped && (
         <div className="ws-card-equipped-badge">

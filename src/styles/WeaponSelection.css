@@ -65,7 +65,7 @@
   position: relative;
   aspect-ratio: 4/5;
   background: linear-gradient(135deg, #7b5b8d 0%, #4a3e64 100%); /* 4-star default */
-  border-radius: 6px 18px 6px 6px; 
+  border-radius: 6px 6px 6px 6px; 
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
@@ -99,12 +99,15 @@
   top: 3px;
   left: 3px;
   background: rgba(0,0,0,0.6);
-  color: #ffcc32;
+  color: #ffffff;
   font-size: 0.75rem;
   font-weight: bold;
   padding: 1px 5px;
   border-radius: 3px;
   z-index: 2;
+}
+.ws-card-refine.max-refine {
+  color: #ffcc32;
 }
 .ws-card-lock {
   position: absolute;
