@@ -1028,6 +1028,22 @@ export const WEAPONS_DATA: WeaponItemData[] = [
     "svgPath": "/assets/images/svg-tech/codepen-original.svg"
   },
   {
+    "id": "git",
+    "name": "Git",
+    "type": "Tool",
+    "rarity": 5,
+    "refinement": 5,
+    "level": 90,
+    "maxLevel": 90,
+    "baseAtk": 674,
+    "subStatName": "Distributed VCS",
+    "subStatValue": "44.1%",
+    "passiveName": "Branching & Merging",
+    "passiveDesc": "Non-linear development workflows allow instant branching, merging, and time-travel history inspection.",
+    "description": "The fast, scalable, distributed version control system designed to handle everything from small to very large projects.",
+    "svgPath": "/assets/images/svg-tech/git-original.svg"
+  },
+  {
     "id": "github",
     "name": "GitHub",
     "type": "Platform",
